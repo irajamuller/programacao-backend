@@ -14,7 +14,6 @@ import br.com.store.backend.model.Produto;
 @RequestMapping("/produto")
 public class ProdutoController {
 
-	
 	@GetMapping
 	public List<Produto> getAll() {
 		Produto p = Produto.builder()
