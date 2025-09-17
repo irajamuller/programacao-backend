@@ -1,6 +1,8 @@
 package br.com.store.backend.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -9,9 +11,11 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -20,24 +24,26 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Builder
-@NoArgsConstructor @AllArgsConstructor
-@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @EqualsAndHashCode(of = "id")
 @Entity
-public class Produto {
+public class Carrinho {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
-	@Column(length = 50, nullable = false)
-	private String nome;
+	@Column(nullable = false)
+	private LocalDateTime dtEmissao;
 	@Column(precision = 12, scale = 2, nullable = false)
-	private BigDecimal precoUnitario;
-	@Column(length = 12, nullable = false)
-	private Integer estoque;
-	@Lob
-	private byte[] foto;
-	
-	@ManyToOne(optional = false) // obrigatório
-	@JoinColumn(name = "categoria", foreignKey = @ForeignKey(name = "fk_produto_categoria"))
-	private Categoria categoria;
+	private BigDecimal vlrTotal;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "cliente", foreignKey = @ForeignKey(name = "fk_carrinho_cliente"))
+	private Cliente cliente;
+	@OneToMany(mappedBy = "carrinho")
+	private List<CarrinhoItem> carrinhoItens;
+	@OneToMany(mappedBy = "carrinho")
+	private List<CarrinhoPgto> carrinhoPgtos;
 }
+

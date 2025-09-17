@@ -1,17 +1,12 @@
 package br.com.store.backend.model;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -24,20 +19,10 @@ import lombok.Setter;
 @Getter @Setter
 @EqualsAndHashCode(of = "id")
 @Entity
-public class Produto {
+public class Categoria {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
 	@Column(length = 50, nullable = false)
 	private String nome;
-	@Column(precision = 12, scale = 2, nullable = false)
-	private BigDecimal precoUnitario;
-	@Column(length = 12, nullable = false)
-	private Integer estoque;
-	@Lob
-	private byte[] foto;
-	
-	@ManyToOne(optional = false) // obrigatório
-	@JoinColumn(name = "categoria", foreignKey = @ForeignKey(name = "fk_produto_categoria"))
-	private Categoria categoria;
 }

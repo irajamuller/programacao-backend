@@ -9,9 +9,10 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -20,24 +21,26 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Builder
-@NoArgsConstructor @AllArgsConstructor
-@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @EqualsAndHashCode(of = "id")
 @Entity
-public class Produto {
+@Table(indexes = {
+		@Index(name = "fk_carrinhoPgto_carrinho", columnList = "carrinho" )
+})
+public class CarrinhoPgto {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
-	@Column(length = 50, nullable = false)
-	private String nome;
 	@Column(precision = 12, scale = 2, nullable = false)
-	private BigDecimal precoUnitario;
-	@Column(length = 12, nullable = false)
-	private Integer estoque;
-	@Lob
-	private byte[] foto;
+	private BigDecimal vlrPgto;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "carrinho", foreignKey = @ForeignKey(name = "fk_carrinhoPgto_carrinho"))
+	private Carrinho carrinho;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "meioPgto", foreignKey = @ForeignKey(name = "fk_carrinhoPgto_meioPGto"))
+	private MeioPgto meioPgto;
 	
-	@ManyToOne(optional = false) // obrigatório
-	@JoinColumn(name = "categoria", foreignKey = @ForeignKey(name = "fk_produto_categoria"))
-	private Categoria categoria;
 }
